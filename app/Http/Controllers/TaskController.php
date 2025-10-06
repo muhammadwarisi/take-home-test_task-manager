@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tasks;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class TaskController extends Controller
@@ -74,7 +75,10 @@ class TaskController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //cari data tasks berdasarkan id
+        $task = Tasks::findOrFail($id);
+        //return view edit dengan data tasks
+        return response()->json($task);
     }
 
     /**
@@ -115,12 +119,33 @@ class TaskController extends Controller
             $task = Tasks::findOrFail($id);
             //hapus data tasks
             $task->delete();
-            Alert::success('Sukses', 'Tugas berhasil dihapus.');
+            // return kembali ke halaman index tasks
+            return response()->json([
+                'success' => true,
+                'message' => 'Tugas berhasil dihapus'
+            ]);
         } catch (\Throwable $th) {
             //throw $th;
-            Alert::error('Gagal', 'Tugas gagal dihapus.');
+            Log::error('Gagal menghapus tugas: ' . $th->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus tugas'
+            ], 500);
         }
-        // return kembali ke halaman index tasks
-        return redirect()->route('tasks.index');
+    }
+
+
+    public function updateStatus(Request $request, string $id)
+    {
+        $task = Tasks::findOrFail($id);
+
+        // Toggle status
+        $task->status = strtolower($task->status) === 'belum selesai' ? 'Selesai' : 'Belum Selesai';
+        $task->save();
+
+        return response()->json([
+            'success' => true,
+            'new_status' => $task->status
+        ]);
     }
 }
