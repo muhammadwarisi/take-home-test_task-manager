@@ -39,7 +39,7 @@ class AuthController extends Controller
         } else {
             // jika gagal, kembali ke halaman login dengan pesan error
             Alert::error('Login Gagal', 'Email atau password salah');
-            return redirect()->route('login-form')->withErrors(['email' => 'Email atau password salah'])->withInput();
+            return redirect()->route('login')->withErrors(['email' => 'Email atau password salah'])->withInput();
         }
     }
 
