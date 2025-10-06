@@ -15,12 +15,7 @@ Task Manager ini dibuat untuk  memanage tugas-tugas kita sehari-hari agar bisa l
 
 ## Require Stack
 
-php 8.2, composer, pgsql
-
-
-## Screenshots
-
-![Gambar Apk](https://drive.google.com/file/d/117eYCOK32xWz0_TKbNj3puHyIscBm8Uv/view?usp=sharing)
+php 8.2, composer
 
 
 ## Installation
@@ -40,6 +35,13 @@ setelah itu
 php artisan migrate
 php artisan db:seed
 ```
+copy file **env.example** lalu ubah menjadi **.env**
+
+Lalu jangan lupa untuk generate APP_KEY
+```
+php artisan key:generate
+```
+
 terakhir
 ```
 php artisan serve
